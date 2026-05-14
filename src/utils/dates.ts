@@ -16,3 +16,15 @@ export function isUrgent(isoDate: string | null, thresholdDays = 3): boolean {
   const days = daysUntil(isoDate);
   return days >= 0 && days <= thresholdDays;
 }
+
+export function addDays(n: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() + n);
+  return d.toISOString().slice(0, 10);
+}
+
+export function addMonths(n: number): string {
+  const d = new Date();
+  d.setMonth(d.getMonth() + n);
+  return d.toISOString().slice(0, 10);
+}
