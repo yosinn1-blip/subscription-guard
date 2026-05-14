@@ -45,3 +45,17 @@ export async function rescheduleAll(subs: Subscription[]): Promise<void> {
       .map((s) => scheduleTrialReminder(s))
   );
 }
+
+export async function sendTestNotification(): Promise<void> {
+  await Notifications.scheduleNotificationAsync({
+    identifier: 'test-notification',
+    content: {
+      title: '通知テスト',
+      body: '通知が正常に届いています。トライアル終了前日にこのように通知されます。',
+    },
+    trigger: {
+      type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+      seconds: 5,
+    } as any,
+  });
+}

@@ -6,16 +6,27 @@ import {
   StyleSheet,
   Pressable,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { loadAll } from '../src/storage/subscriptions';
-import { rescheduleAll } from '../src/notifications/scheduler';
+import { rescheduleAll, sendTestNotification, requestPermission } from '../src/notifications/scheduler';
 import SubscriptionCard from '../src/components/SubscriptionCard';
 import type { Subscription } from '../src/types/subscription';
 
 export default function HomeScreen() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const router = useRouter();
+
+  const handleTestNotification = async () => {
+    const granted = await requestPermission();
+    if (!granted) {
+      Alert.alert('通知が許可されていません', '設定アプリから通知を許可してください。');
+      return;
+    }
+    await sendTestNotification();
+    Alert.alert('5秒後に通知が届きます', 'アプリをバックグラウンドに移動してください。');
+  };
 
   const load = useCallback(async () => {
     const all = await loadAll();
@@ -42,9 +53,14 @@ export default function HomeScreen() {
       <View style={styles.container}>
         <View style={styles.headerRow}>
           <Text style={styles.title}>トライアル監視</Text>
-          <Pressable style={styles.addButton} onPress={() => router.push('/add')}>
-            <Text style={styles.addButtonText}>＋ 追加</Text>
-          </Pressable>
+          <View style={styles.headerActions}>
+            <Pressable style={styles.testButton} onPress={handleTestNotification}>
+              <Text style={styles.testButtonText}>通知テスト</Text>
+            </Pressable>
+            <Pressable style={styles.addButton} onPress={() => router.push('/add')}>
+              <Text style={styles.addButtonText}>＋ 追加</Text>
+            </Pressable>
+          </View>
         </View>
 
         <FlatList
@@ -81,6 +97,23 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '700',
     color: '#1a1a1a',
+  },
+  headerActions: {
+    flexDirection: 'row',
+    gap: 8,
+    alignItems: 'center',
+  },
+  testButton: {
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: '#C0C0C0',
+  },
+  testButtonText: {
+    color: '#888',
+    fontWeight: '500',
+    fontSize: 13,
   },
   addButton: {
     backgroundColor: '#5C8A6E',
