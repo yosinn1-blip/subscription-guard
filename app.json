@@ -4,18 +4,39 @@
     "slug": "subscription-guard",
     "scheme": "subscription-guard",
     "version": "1.0.0",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
     "platforms": ["ios"],
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F5F5F0"
+    },
     "ios": {
-      "bundleIdentifier": "com.yourname.subscriptionguard",
-      "supportsTablet": false
+      "bundleIdentifier": "com.yoshiki.subscriptionguard",
+      "supportsTablet": false,
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSUserNotificationsUsageDescription": "トライアル終了前日にリマインドするために通知を使用します。"
+      }
     },
     "plugins": [
       [
         "expo-notifications",
         {
-          "color": "#5C8A6E"
+          "icon": "./assets/icon.png",
+          "color": "#5C8A6E",
+          "sounds": []
         }
-      ]
-    ]
+      ],
+      "@react-native-community/datetimepicker"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": ""
+      }
+    }
   }
 }
