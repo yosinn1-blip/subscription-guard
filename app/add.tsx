@@ -16,17 +16,13 @@ import { ServiceEntry } from '../src/data/services';
 import ServiceGrid from '../src/components/ServiceGrid';
 import DatePickerField from '../src/components/DatePickerField';
 
-type StatusOption = 'trial' | 'active';
-
 export default function AddScreen() {
   const router = useRouter();
 
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
-  const [status, setStatus] = useState<StatusOption>('trial');
   const [trialEndDate, setTrialEndDate] = useState<string | null>(null);
-  const [nextBillingDate, setNextBillingDate] = useState<string | null>(null);
   const [cancelUrl, setCancelUrl] = useState('');
 
   const isCustomService = selectedServiceId === '__other__' || selectedServiceId === null;
@@ -54,15 +50,13 @@ export default function AddScreen() {
     const sub = await addSubscription({
       name: name.trim(),
       price: price ? parseInt(price, 10) : 0,
-      status,
-      trialEndDate: status === 'trial' ? trialEndDate : null,
-      nextBillingDate,
+      status: 'trial',
+      trialEndDate,
       cancelUrl: cancelUrl || null,
-      cancelNotes: null,
       notifyDaysBefore: 1,
     });
 
-    if (sub.status === 'trial' && sub.trialEndDate) {
+    if (sub.trialEndDate) {
       await scheduleTrialReminder(sub);
     }
 
@@ -96,30 +90,8 @@ export default function AddScreen() {
           placeholderTextColor="#bbb"
         />
 
-        <Text style={styles.label}>ステータス</Text>
-        <View style={styles.segmentRow}>
-          {(['trial', 'active'] as StatusOption[]).map((opt) => (
-            <Pressable
-              key={opt}
-              style={[styles.segment, status === opt && styles.segmentActive]}
-              onPress={() => setStatus(opt)}
-            >
-              <Text style={[styles.segmentText, status === opt && styles.segmentTextActive]}>
-                {opt === 'trial' ? '無料トライアル' : '通常課金'}
-              </Text>
-            </Pressable>
-          ))}
-        </View>
-
-        {status === 'trial' && (
-          <>
-            <Text style={styles.label}>トライアル終了日</Text>
-            <DatePickerField value={trialEndDate} onChange={setTrialEndDate} />
-          </>
-        )}
-
-        <Text style={styles.label}>次回請求日</Text>
-        <DatePickerField value={nextBillingDate} onChange={setNextBillingDate} />
+        <Text style={styles.label}>トライアル終了日</Text>
+        <DatePickerField value={trialEndDate} onChange={setTrialEndDate} />
 
         <Text style={styles.sectionTitle}>解約情報</Text>
         <Text style={styles.label}>解約ページURL</Text>
@@ -167,19 +139,6 @@ const styles = StyleSheet.create({
     color: '#888',
     backgroundColor: '#F8F8F8',
   },
-  segmentRow: { flexDirection: 'row', gap: 8 },
-  segment: {
-    flex: 1,
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 12,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-  },
-  segmentActive: { backgroundColor: '#5C8A6E', borderColor: '#5C8A6E' },
-  segmentText: { fontSize: 14, color: '#555', fontWeight: '500' },
-  segmentTextActive: { color: '#fff' },
   saveButton: {
     backgroundColor: '#5C8A6E',
     borderRadius: 14,
