@@ -26,7 +26,6 @@ export default function DetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const [sub, setSub] = useState<Subscription | null>(null);
-  const [cancelNotes, setCancelNotes] = useState('');
   const [cancelUrl, setCancelUrl] = useState('');
 
   useEffect(() => {
@@ -35,7 +34,6 @@ export default function DetailScreen() {
       const found = all.find((s) => s.id === id) ?? null;
       setSub(found);
       if (found) {
-        setCancelNotes(found.cancelNotes ?? '');
         setCancelUrl(found.cancelUrl ?? '');
       }
     })();
@@ -45,32 +43,16 @@ export default function DetailScreen() {
 
   const handleSave = async () => {
     const updated = await updateSubscription(id, {
-      cancelNotes: cancelNotes || null,
       cancelUrl: cancelUrl || null,
     });
-    if (updated.status === 'trial' && updated.trialEndDate) {
+    if (updated.trialEndDate) {
       await scheduleTrialReminder(updated);
     }
     router.back();
   };
 
-  const handleMarkCancelled = async () => {
-    Alert.alert('解約済みにする', `${sub.name} を解約済みにしますか？`, [
-      { text: 'キャンセル', style: 'cancel' },
-      {
-        text: '解約済みにする',
-        style: 'destructive',
-        onPress: async () => {
-          await updateSubscription(id, { status: 'cancelled' });
-          await cancelReminder(id);
-          router.back();
-        },
-      },
-    ]);
-  };
-
   const handleDelete = () => {
-    Alert.alert('削除', `${sub.name} を完全に削除しますか？`, [
+    Alert.alert('削除', `${sub.name} を削除しますか？`, [
       { text: 'キャンセル', style: 'cancel' },
       {
         text: '削除',
@@ -104,30 +86,19 @@ export default function DetailScreen() {
           autoCapitalize="none"
           placeholderTextColor="#bbb"
         />
-        {cancelUrl ? (
-          <Pressable onPress={() => Linking.openURL(cancelUrl)}>
-            <Text style={styles.link}>解約ページを開く →</Text>
-          </Pressable>
-        ) : null}
-
-        <Text style={styles.label}>解約手順メモ</Text>
-        <TextInput
-          style={[styles.input, styles.multiline]}
-          value={cancelNotes}
-          onChangeText={setCancelNotes}
-          placeholder="例: アカウント設定 → プラン管理 → キャンセル"
-          multiline
-          numberOfLines={4}
-          placeholderTextColor="#bbb"
-        />
 
         <Pressable style={styles.saveButton} onPress={handleSave}>
           <Text style={styles.saveButtonText}>保存する</Text>
         </Pressable>
 
-        <Pressable style={styles.cancelledButton} onPress={handleMarkCancelled}>
-          <Text style={styles.cancelledButtonText}>解約済みにする</Text>
-        </Pressable>
+        {cancelUrl ? (
+          <Pressable
+            style={styles.openCancelButton}
+            onPress={() => Linking.openURL(cancelUrl)}
+          >
+            <Text style={styles.openCancelButtonText}>解約ページへ →</Text>
+          </Pressable>
+        ) : null}
 
         <Pressable style={styles.deleteButton} onPress={handleDelete}>
           <Text style={styles.deleteButtonText}>削除する</Text>
@@ -161,8 +132,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E0E0E0',
   },
-  multiline: { height: 100, textAlignVertical: 'top' },
-  link: { color: '#5C8A6E', fontSize: 14, marginTop: 6, fontWeight: '500' },
   saveButton: {
     backgroundColor: '#5C8A6E',
     borderRadius: 14,
@@ -171,16 +140,14 @@ const styles = StyleSheet.create({
     marginTop: 32,
   },
   saveButtonText: { color: '#fff', fontSize: 16, fontWeight: '700' },
-  cancelledButton: {
-    backgroundColor: '#fff',
+  openCancelButton: {
+    backgroundColor: '#C0392B',
     borderRadius: 14,
     padding: 16,
     alignItems: 'center',
     marginTop: 12,
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
   },
-  cancelledButtonText: { color: '#555', fontSize: 15, fontWeight: '600' },
+  openCancelButtonText: { color: '#fff', fontSize: 15, fontWeight: '600' },
   deleteButton: {
     backgroundColor: '#fff',
     borderRadius: 14,
