@@ -53,14 +53,9 @@ export default function HomeScreen() {
       <View style={styles.container}>
         <View style={styles.headerRow}>
           <Text style={styles.title}>トライアル監視</Text>
-          <View style={styles.headerActions}>
-            <Pressable style={styles.testButton} onPress={handleTestNotification}>
-              <Text style={styles.testButtonText}>通知テスト</Text>
-            </Pressable>
-            <Pressable style={styles.addButton} onPress={() => router.push('/add')}>
-              <Text style={styles.addButtonText}>＋ 追加</Text>
-            </Pressable>
-          </View>
+          <Pressable style={styles.testButton} onPress={handleTestNotification}>
+            <Text style={styles.testButtonText}>通知テスト</Text>
+          </Pressable>
         </View>
 
         <FlatList
@@ -78,6 +73,9 @@ export default function HomeScreen() {
           contentContainerStyle={subscriptions.length === 0 ? styles.emptyContainer : undefined}
         />
       </View>
+      <Pressable style={styles.fab} onPress={() => router.push('/add')}>
+        <Text style={styles.fabText}>＋</Text>
+      </Pressable>
     </SafeAreaView>
   );
 }
@@ -98,11 +96,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#1a1a1a',
   },
-  headerActions: {
-    flexDirection: 'row',
-    gap: 8,
-    alignItems: 'center',
-  },
   testButton: {
     borderRadius: 20,
     paddingHorizontal: 12,
@@ -115,16 +108,27 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 13,
   },
-  addButton: {
+  fab: {
+    position: 'absolute',
+    bottom: 32,
+    right: 24,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     backgroundColor: '#5C8A6E',
-    borderRadius: 20,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 6,
   },
-  addButtonText: {
+  fabText: {
     color: '#fff',
-    fontWeight: '600',
-    fontSize: 14,
+    fontSize: 28,
+    lineHeight: 32,
+    fontWeight: '400',
   },
   empty: { alignItems: 'center', paddingTop: 60 },
   emptyContainer: { flex: 1, justifyContent: 'center' },
