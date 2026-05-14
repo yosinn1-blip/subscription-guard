@@ -22,13 +22,9 @@
     "@testing-library/jest-native": "^5.4.3",
     "@testing-library/react-native": "^13.3.3",
     "@types/react": "~19.1.0",
+    "jest": "^30.4.2",
+    "jest-expo": "^55.0.17",
     "typescript": "~5.9.2"
-  },
-  "jest": {
-    "preset": "jest-expo",
-    "setupFilesAfterFramework": [
-      "./jest.setup.js"
-    ]
   },
   "private": true
 }
