@@ -1,5 +1,6 @@
 import { View, Text, Pressable, FlatList, StyleSheet, Dimensions } from 'react-native';
 import { SERVICES, ServiceEntry } from '../data/services';
+import ServiceLogo from './ServiceLogo';
 
 interface Props {
   selectedId: string | null;
@@ -22,7 +23,7 @@ export default function ServiceGrid({ selectedId, onSelect }: Props) {
           style={[styles.cell, isActive && styles.cellActive]}
           onPress={() => onSelect(null)}
         >
-          <Text style={styles.emoji}>✏️</Text>
+          <Text style={styles.otherIcon}>✏️</Text>
           <Text style={styles.name}>その他</Text>
         </Pressable>
       );
@@ -37,7 +38,7 @@ export default function ServiceGrid({ selectedId, onSelect }: Props) {
         onPress={() => onSelect(svc)}
       >
         <View style={[styles.iconBg, { backgroundColor: svc.color }]}>
-          <Text style={styles.emoji}>{svc.emoji}</Text>
+          <ServiceLogo iconSlug={svc.iconSlug} size={28} color="#fff" fallback={svc.name[0]} />
         </View>
         <Text style={styles.name} numberOfLines={1}>{svc.name}</Text>
       </Pressable>
@@ -76,6 +77,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 4,
   },
-  emoji: { fontSize: 22 },
+  otherIcon: { fontSize: 22, marginBottom: 4 },
   name: { fontSize: 10, color: '#444', fontWeight: '500', textAlign: 'center' },
 });
