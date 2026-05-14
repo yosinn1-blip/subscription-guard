@@ -12,27 +12,42 @@ import {
 import { useRouter } from 'expo-router';
 import { addSubscription } from '../src/storage/subscriptions';
 import { scheduleTrialReminder } from '../src/notifications/scheduler';
+import { ServiceEntry } from '../src/data/services';
+import ServiceGrid from '../src/components/ServiceGrid';
+import DatePickerField from '../src/components/DatePickerField';
 
 type StatusOption = 'trial' | 'active';
 
 export default function AddScreen() {
   const router = useRouter();
+
+  const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [status, setStatus] = useState<StatusOption>('trial');
-  const [trialEndDate, setTrialEndDate] = useState('');
-  const [nextBillingDate, setNextBillingDate] = useState('');
+  const [trialEndDate, setTrialEndDate] = useState<string | null>(null);
+  const [nextBillingDate, setNextBillingDate] = useState<string | null>(null);
   const [cancelUrl, setCancelUrl] = useState('');
 
-  const isValidDate = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(s);
+  const isCustomService = selectedServiceId === '__other__' || selectedServiceId === null;
+
+  const handleServiceSelect = (service: ServiceEntry | null) => {
+    if (service === null) {
+      setSelectedServiceId('__other__');
+      setName('');
+      setPrice('');
+      setCancelUrl('');
+    } else {
+      setSelectedServiceId(service.id);
+      setName(service.name);
+      setPrice(service.defaultPrice > 0 ? String(service.defaultPrice) : '');
+      setCancelUrl(service.cancelUrl ?? '');
+    }
+  };
 
   const handleSave = async () => {
     if (!name.trim()) {
       Alert.alert('エラー', 'サービス名を入力してください');
-      return;
-    }
-    if (status === 'trial' && trialEndDate && !isValidDate(trialEndDate)) {
-      Alert.alert('エラー', 'トライアル終了日は YYYY-MM-DD 形式で入力してください');
       return;
     }
 
@@ -40,8 +55,8 @@ export default function AddScreen() {
       name: name.trim(),
       price: price ? parseInt(price, 10) : 0,
       status,
-      trialEndDate: status === 'trial' && trialEndDate ? trialEndDate : null,
-      nextBillingDate: nextBillingDate || null,
+      trialEndDate: status === 'trial' ? trialEndDate : null,
+      nextBillingDate,
       cancelUrl: cancelUrl || null,
       cancelNotes: null,
       notifyDaysBefore: 1,
@@ -57,14 +72,17 @@ export default function AddScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        <Text style={styles.sectionTitle}>サービス情報</Text>
+
+        <Text style={styles.sectionTitle}>サービスを選ぶ</Text>
+        <ServiceGrid selectedId={selectedServiceId} onSelect={handleServiceSelect} />
 
         <Text style={styles.label}>サービス名 *</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, !isCustomService && styles.inputReadonly]}
           value={name}
-          onChangeText={setName}
-          placeholder="例: Netflix"
+          onChangeText={isCustomService ? setName : undefined}
+          editable={isCustomService}
+          placeholder="サービス名を入力"
           placeholderTextColor="#bbb"
         />
 
@@ -96,27 +114,14 @@ export default function AddScreen() {
         {status === 'trial' && (
           <>
             <Text style={styles.label}>トライアル終了日</Text>
-            <TextInput
-              style={styles.input}
-              value={trialEndDate}
-              onChangeText={setTrialEndDate}
-              placeholder="YYYY-MM-DD"
-              placeholderTextColor="#bbb"
-            />
+            <DatePickerField value={trialEndDate} onChange={setTrialEndDate} />
           </>
         )}
 
         <Text style={styles.label}>次回請求日</Text>
-        <TextInput
-          style={styles.input}
-          value={nextBillingDate}
-          onChangeText={setNextBillingDate}
-          placeholder="YYYY-MM-DD"
-          placeholderTextColor="#bbb"
-        />
+        <DatePickerField value={nextBillingDate} onChange={setNextBillingDate} />
 
         <Text style={styles.sectionTitle}>解約情報</Text>
-
         <Text style={styles.label}>解約ページURL</Text>
         <TextInput
           style={styles.input}
@@ -157,6 +162,10 @@ const styles = StyleSheet.create({
     color: '#1a1a1a',
     borderWidth: 1,
     borderColor: '#E0E0E0',
+  },
+  inputReadonly: {
+    color: '#888',
+    backgroundColor: '#F8F8F8',
   },
   segmentRow: { flexDirection: 'row', gap: 8 },
   segment: {
