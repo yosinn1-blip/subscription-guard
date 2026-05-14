@@ -7,7 +7,9 @@
     "runtimeVersion": {
       "policy": "appVersion"
     },
-    "platforms": ["ios"],
+    "platforms": [
+      "ios"
+    ],
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash-icon.png",
@@ -35,8 +37,10 @@
     ],
     "extra": {
       "eas": {
-        "projectId": ""
+        "projectId": "065fbf61-a732-4075-b773-eb63399125a6"
       }
-    }
+    },
+    "privacyPolicyUrl": "https://yosinn1-blip.github.io/subscription-guard/privacy.html",
+    "owner": "yosinn"
   }
 }
