@@ -46,14 +46,16 @@ export default function DatePickerField({ value, onChange }: Props) {
         ))}
       </View>
 
-      <DateTimePicker
-        value={value ? new Date(value) : new Date()}
-        mode="date"
-        display="inline"
-        minimumDate={new Date()}
-        onChange={handlePickerChange}
-        locale="ja-JP"
-      />
+      <View style={styles.pickerWrapper}>
+        <DateTimePicker
+          value={value ? new Date(value) : new Date()}
+          mode="date"
+          display="inline"
+          minimumDate={new Date()}
+          onChange={handlePickerChange}
+          locale="ja-JP"
+        />
+      </View>
 
       {value && (
         <Text style={styles.selected}>✓ {formatDate(value)}</Text>
@@ -74,5 +76,6 @@ const styles = StyleSheet.create({
     borderColor: '#E0E0E0',
   },
   btnText: { fontSize: 12, color: '#555', fontWeight: '500' },
+  pickerWrapper: { width: '100%', alignItems: 'center' },
   selected: { fontSize: 13, color: '#5C8A6E', fontWeight: '600', marginTop: 6 },
 });
