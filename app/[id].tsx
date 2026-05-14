@@ -21,11 +21,14 @@ import {
   cancelReminder,
 } from '../src/notifications/scheduler';
 import type { Subscription } from '../src/types/subscription';
+import DatePickerField from '../src/components/DatePickerField';
 
 export default function DetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const [sub, setSub] = useState<Subscription | null>(null);
+  const [trialEndDate, setTrialEndDate] = useState<string | null>(null);
+  const [price, setPrice] = useState('');
   const [cancelUrl, setCancelUrl] = useState('');
 
   useEffect(() => {
@@ -34,6 +37,8 @@ export default function DetailScreen() {
       const found = all.find((s) => s.id === id) ?? null;
       setSub(found);
       if (found) {
+        setTrialEndDate(found.trialEndDate);
+        setPrice(found.price > 0 ? String(found.price) : '');
         setCancelUrl(found.cancelUrl ?? '');
       }
     })();
@@ -43,6 +48,8 @@ export default function DetailScreen() {
 
   const handleSave = async () => {
     const updated = await updateSubscription(id, {
+      trialEndDate,
+      price: price ? parseInt(price, 10) : 0,
       cancelUrl: cancelUrl || null,
     });
     if (updated.trialEndDate) {
@@ -70,9 +77,19 @@ export default function DetailScreen() {
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.scroll}>
         <Text style={styles.name}>{sub.name}</Text>
-        {sub.price > 0 && (
-          <Text style={styles.price}>¥{sub.price.toLocaleString()}/月</Text>
-        )}
+
+        <Text style={styles.label}>トライアル終了日</Text>
+        <DatePickerField value={trialEndDate} onChange={setTrialEndDate} />
+
+        <Text style={styles.label}>月額（円）</Text>
+        <TextInput
+          style={styles.input}
+          value={price}
+          onChangeText={setPrice}
+          placeholder="例: 1590"
+          keyboardType="number-pad"
+          placeholderTextColor="#bbb"
+        />
 
         <Text style={styles.sectionTitle}>解約情報</Text>
 
