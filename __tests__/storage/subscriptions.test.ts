@@ -15,9 +15,7 @@ const baseData = {
   price: 1590,
   status: 'trial' as const,
   trialEndDate: '2026-05-20',
-  nextBillingDate: '2026-05-20',
   cancelUrl: 'https://netflix.com/cancel',
-  cancelNotes: null,
   notifyDaysBefore: 1,
 };
 

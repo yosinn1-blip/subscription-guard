@@ -15,10 +15,8 @@ const makeSub = (overrides: Partial<Subscription> = {}): Subscription => ({
   name: 'Netflix',
   price: 1590,
   status: 'trial',
-  trialEndDate: '2030-12-31', // far future so it's always schedulable
-  nextBillingDate: '2030-12-31',
+  trialEndDate: '2030-12-31',
   cancelUrl: null,
-  cancelNotes: null,
   notifyDaysBefore: 1,
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
