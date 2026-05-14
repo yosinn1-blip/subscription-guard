@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Linking } from 'react-native';
 import type { Subscription } from '../types/subscription';
 import { formatDate, isUrgent } from '../utils/dates';
 import DaysLeftBadge from './DaysLeftBadge';
@@ -9,8 +9,9 @@ interface Props {
 }
 
 export default function SubscriptionCard({ subscription, onPress }: Props) {
-  const { name, price, trialEndDate, status } = subscription;
+  const { name, price, trialEndDate, cancelUrl } = subscription;
   const urgent = isUrgent(trialEndDate);
+  const showCancelButton = urgent && !!cancelUrl;
 
   return (
     <Pressable
@@ -22,10 +23,18 @@ export default function SubscriptionCard({ subscription, onPress }: Props) {
         <Text style={styles.name}>{name}</Text>
         {trialEndDate && <DaysLeftBadge isoDate={trialEndDate} />}
       </View>
-      {status === 'trial' && trialEndDate && (
+      {trialEndDate && (
         <Text style={styles.sub}>{formatDate(trialEndDate)}に自動課金開始</Text>
       )}
       {price > 0 && <Text style={styles.price}>¥{price.toLocaleString()}/月</Text>}
+      {showCancelButton && (
+        <Pressable
+          style={styles.cancelButton}
+          onPress={() => Linking.openURL(cancelUrl!)}
+        >
+          <Text style={styles.cancelButtonText}>解約ページへ →</Text>
+        </Pressable>
+      )}
     </Pressable>
   );
 }
@@ -69,5 +78,18 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#444',
     marginTop: 6,
+  },
+  cancelButton: {
+    marginTop: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    backgroundColor: '#C0392B',
+    borderRadius: 8,
+    alignSelf: 'flex-start',
+  },
+  cancelButtonText: {
+    color: '#fff',
+    fontSize: 13,
+    fontWeight: '600',
   },
 });
