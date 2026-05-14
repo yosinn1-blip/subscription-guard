@@ -78,9 +78,6 @@ export default function DetailScreen() {
       <ScrollView contentContainerStyle={styles.scroll}>
         <Text style={styles.name}>{sub.name}</Text>
 
-        <Text style={styles.label}>トライアル終了日</Text>
-        <DatePickerField value={trialEndDate} onChange={setTrialEndDate} />
-
         <Text style={styles.label}>月額（円）</Text>
         <TextInput
           style={styles.input}
@@ -92,6 +89,9 @@ export default function DetailScreen() {
         />
 
         <Text style={styles.sectionTitle}>解約情報</Text>
+
+        <Text style={styles.label}>トライアル終了日</Text>
+        <DatePickerField value={trialEndDate} onChange={setTrialEndDate} />
 
         <Text style={styles.label}>解約ページURL</Text>
         <TextInput
