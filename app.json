@@ -4,9 +4,6 @@
     "slug": "subscription-guard",
     "scheme": "subscription-guard",
     "version": "1.0.0",
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
     "platforms": [
       "ios"
     ],
@@ -21,7 +18,8 @@
       "supportsTablet": false,
       "buildNumber": "1",
       "infoPlist": {
-        "NSUserNotificationsUsageDescription": "トライアル終了前日にリマインドするために通知を使用します。"
+        "NSUserNotificationsUsageDescription": "トライアル終了前日にリマインドするために通知を使用します。",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "plugins": [
