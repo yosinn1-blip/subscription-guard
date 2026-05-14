@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "Subscription Guard",
+    "slug": "subscription-guard",
+    "scheme": "subscription-guard",
+    "version": "1.0.0",
+    "platforms": ["ios"],
+    "ios": {
+      "bundleIdentifier": "com.yourname.subscriptionguard",
+      "supportsTablet": false
+    },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "color": "#5C8A6E"
+        }
+      ]
+    ]
+  }
+}
