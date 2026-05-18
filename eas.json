@@ -20,13 +20,18 @@
     "production": {
       "autoIncrement": true,
       "ios": {
-        "simulator": false
+        "simulator": false,
+        "credentialsSource": "local"
       }
     }
   },
   "submit": {
     "production": {
-      "ios": {}
+      "ios": {
+        "appleId": "yosinn1@gmail.com",
+        "ascAppId": "6770502246",
+        "appleTeamId": "VLK9C3VMW6"
+      }
     }
   }
 }
