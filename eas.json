@@ -30,7 +30,10 @@
       "ios": {
         "appleId": "yosinn1@gmail.com",
         "ascAppId": "6770502246",
-        "appleTeamId": "VLK9C3VMW6"
+        "appleTeamId": "VLK9C3VMW6",
+        "ascApiKeyPath": "/Users/yoshiki/.config/eas/AuthKey_Z2D5B9VC8K.p8",
+        "ascApiKeyIssuerId": "8db3ef5f-3370-45e7-bb79-af7a512516e6",
+        "ascApiKeyId": "Z2D5B9VC8K"
       }
     }
   }

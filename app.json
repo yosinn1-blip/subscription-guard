@@ -16,7 +16,7 @@
     "ios": {
       "bundleIdentifier": "com.yoshiki.subscriptionguard",
       "supportsTablet": false,
-      "buildNumber": "1",
+      "buildNumber": "5",
       "infoPlist": {
         "NSUserNotificationsUsageDescription": "トライアル終了前日にリマインドするために通知を使用します。",
         "ITSAppUsesNonExemptEncryption": false

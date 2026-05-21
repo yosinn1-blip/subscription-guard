@@ -59,8 +59,11 @@ Microsoft 365 / Notion / GitHub / Zoom / Discord Nitro /
 ## キーワード（100文字以内、カンマ区切り）
 
 ```
-サブスク,トライアル,解約,通知,無料体験,課金,サブスクリプション,管理,リマインダー,Netflix
+解約忘れ,自動更新,課金防止,解約,通知,課金,サブスク,管理,Netflix,Spotify,iCloud,定期課金,リマインド,Hulu,Disney,月額,YouTube
 ```
+
+※ アプリ名・サブタイトルにある語（Subscription,Guard,無料,トライアル,番人）は除外済み（Appleが自動でインデックスするため重複は無駄）
+※ 88文字 / 100文字
 
 ---
 
