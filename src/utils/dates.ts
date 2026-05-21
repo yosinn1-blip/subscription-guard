@@ -1,9 +1,9 @@
 export function daysUntil(isoDate: string): number {
-  const target = new Date(isoDate);
-  target.setHours(0, 0, 0, 0);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  return Math.round((target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+  const now = new Date();
+  const todayUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  const [y, m, d] = isoDate.split('-').map(Number);
+  const targetUTC = Date.UTC(y, m - 1, d);
+  return Math.round((targetUTC - todayUTC) / (1000 * 60 * 60 * 24));
 }
 
 export function formatDate(isoDate: string): string {
