@@ -77,13 +77,13 @@ Microsoft 365 / Notion / GitHub / Zoom / Discord Nitro /
 
 ## サポートURL
 
-（GitHub Pages か Cloudflare Pages でランディングページを作成後に記入）
+https://yosinn1-blip.github.io/subscription-guard/
 
 ---
 
 ## プライバシーポリシーURL
 
-（同上）
+https://yosinn1-blip.github.io/subscription-guard/privacy.html
 
 ---
 
