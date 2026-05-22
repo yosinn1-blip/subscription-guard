@@ -58,6 +58,20 @@ export default function DetailScreen() {
     router.back();
   };
 
+  const handleMarkCancelled = () => {
+    Alert.alert('解約済みにする', `${sub.name} を解約済みとしてマークしますか？`, [
+      { text: 'キャンセル', style: 'cancel' },
+      {
+        text: '解約済みにする',
+        onPress: async () => {
+          await updateSubscription(id, { status: 'cancelled' });
+          await cancelReminder(id);
+          router.back();
+        },
+      },
+    ]);
+  };
+
   const handleDelete = () => {
     Alert.alert('削除', `${sub.name} を削除しますか？`, [
       { text: 'キャンセル', style: 'cancel' },
@@ -117,6 +131,12 @@ export default function DetailScreen() {
           </Pressable>
         ) : null}
 
+        {sub.status === 'trial' && (
+          <Pressable style={styles.cancelledButton} onPress={handleMarkCancelled}>
+            <Text style={styles.cancelledButtonText}>解約済みにする ✓</Text>
+          </Pressable>
+        )}
+
         <Pressable style={styles.deleteButton} onPress={handleDelete}>
           <Text style={styles.deleteButtonText}>削除する</Text>
         </Pressable>
@@ -165,6 +185,14 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   openCancelButtonText: { color: '#fff', fontSize: 15, fontWeight: '600' },
+  cancelledButton: {
+    backgroundColor: '#5C8A6E',
+    borderRadius: 14,
+    padding: 16,
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  cancelledButtonText: { color: '#fff', fontSize: 15, fontWeight: '600' },
   deleteButton: {
     backgroundColor: '#fff',
     borderRadius: 14,
