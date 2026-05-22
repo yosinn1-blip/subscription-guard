@@ -8,6 +8,8 @@ export interface Subscription {
   trialEndDate: string | null;
   cancelUrl: string | null;
   notifyDaysBefore: number;
+  iconSlug?: string | null;
+  color?: string | null;
   createdAt: string;
   updatedAt: string;
 }

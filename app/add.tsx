@@ -111,6 +111,8 @@ export default function AddScreen() {
       trialEndDate,
       cancelUrl: cancelUrl || null,
       notifyDaysBefore: 1,
+      iconSlug: selectedService?.iconSlug ?? null,
+      color: selectedService?.color ?? null,
     });
 
     if (sub.trialEndDate) {

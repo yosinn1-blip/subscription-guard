@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, Pressable, Linking } from 'react-native';
 import type { Subscription } from '../types/subscription';
 import { formatDate, isUrgent } from '../utils/dates';
 import DaysLeftBadge from './DaysLeftBadge';
+import ServiceLogo from './ServiceLogo';
 
 interface Props {
   subscription: Subscription;
@@ -9,7 +10,7 @@ interface Props {
 }
 
 export default function SubscriptionCard({ subscription, onPress }: Props) {
-  const { name, price, trialEndDate, cancelUrl } = subscription;
+  const { name, price, trialEndDate, cancelUrl, iconSlug, color } = subscription;
   const urgent = isUrgent(trialEndDate);
   const showCancelButton = urgent && !!cancelUrl;
 
@@ -20,7 +21,14 @@ export default function SubscriptionCard({ subscription, onPress }: Props) {
       android_ripple={{ color: '#e0e0e0' }}
     >
       <View style={styles.header}>
-        <Text style={styles.name}>{name}</Text>
+        <View style={styles.nameRow}>
+          {iconSlug && color && (
+            <View style={[styles.logoBox, { backgroundColor: color }]}>
+              <ServiceLogo iconSlug={iconSlug} size={18} color="#fff" fallback={name[0]} />
+            </View>
+          )}
+          <Text style={styles.name}>{name}</Text>
+        </View>
         {trialEndDate && <DaysLeftBadge isoDate={trialEndDate} />}
       </View>
       {trialEndDate && (
@@ -61,12 +69,25 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  nameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    marginRight: 8,
+    gap: 8,
+  },
+  logoBox: {
+    width: 28,
+    height: 28,
+    borderRadius: 7,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   name: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1a1a1a',
     flex: 1,
-    marginRight: 8,
   },
   sub: {
     fontSize: 12,
