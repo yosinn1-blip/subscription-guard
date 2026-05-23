@@ -30,7 +30,13 @@ export default function HomeScreen() {
 
   const load = useCallback(async () => {
     const all = await loadAll();
-    const trials = all.filter((s) => s.status === 'trial');
+    const trials = all
+      .filter((s) => s.status === 'trial')
+      .sort((a, b) => {
+        if (!a.trialEndDate) return 1;
+        if (!b.trialEndDate) return -1;
+        return a.trialEndDate.localeCompare(b.trialEndDate);
+      });
     setSubscriptions(trials);
     await rescheduleAll(trials);
   }, []);
