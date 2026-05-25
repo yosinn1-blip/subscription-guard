@@ -40,3 +40,7 @@ yarn-error.*
 /ios
 /android
 credentials.json
+
+.env
+
+.env.*
